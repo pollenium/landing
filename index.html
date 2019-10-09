@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Pollenium - Application Agnostic, Browser Compatible, Gossip Protocol</title>
+    <link href="//fonts.googleapis.com/css?family=Aldrich&subset=latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Archivo&subset=latin" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="hero">
+        <object id="logo" data="./pollenium.svg" type="image/svg+xml"></object>
+        <h1>Pollenium</h1>
+        <h2>Application Agnostic • Browser Compatible • Gossip Protocol</h2>
+        <hr/>
+        <a href="https://github.com/pollenium/whitepaper/blob/master/Pollenium-Whitepaper.md">
+          Whitepaper
+        </a>
+         •
+        <a href="https://pollenium.github.io/pollenboard">
+          Demo
+        </a>
+         •
+        <a href="https://github.com/pollenium">
+          Github
+        </a>
+         •
+        <a href="https://calendly.com/pollenium/consultation">
+          Consultation
+        </a>
+        •
+       <a href="mailto:aakilfernandes@pollenium.network">
+         Contact
+       </a>
+        <hr/>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <h3>Decentralization Should Be Easy</h3>
+          <p>With Pollenium's browser-compatible gossip protocol, you can leave the networking and spam prevention to Pollenium. Simply choose an application id and data format, then focus on building or dApp.</p>
+            <a href="#" class="btn btn-lg btn-primary cta cta-left d-none d-lg-block">
+              Get Started
+            </a>
+        </div>
+        <div class="col-lg-8">
+          <pre><code class="javascript">/* Import dependencies */
+const client = new pollenium.Client()
+const Bytes = pollenium.Bytes
+const FriendMessageGenerator = pollenium.FriendMessageGenerator
+
+/* Choose an application id */
+const applicationId = Bytes.fromUtf8('my-app').padLeft(32)
+
+/* Connect and send a message */
+client.once('fullyConnected', async () => {
+
+  const applicationData = Bytes.fromUtf8('Hello World!')
+
+  const fmg = new FriendMessageGenerator(
+      applicationId,
+      applicationData,
+      client.getNetworkDifficulty()
+    )
+
+  const friendMessage = await fmg.fetchFriendMessage()
+  friendMessage.broadcast()
+
+})
+
+/* Listen for messages from peers */
+client.on('friend.message', (friendMessage) => {
+
+  /* Verify the application id */
+  if (!friendMessage.applicationId.equals(applicationId)) {
+    return
+  }
+
+  /* Use the application data however you like */
+  console.log(
+    friendMessage.applicationData.getUtf8()
+  )
+})
+          </code></pre>
+            <a href="#" class="btn btn-lg btn-primary cta cta-right d-lg-none">
+              Get Started
+            </a>
+        </div>
+      </div>
+      <div id="footer">Logo made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js" integrity="sha256-1zu+3BnLYV9LdiY85uXMzii3bdrkelyp37e0ZyTAQh0=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
